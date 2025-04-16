@@ -1,21 +1,15 @@
 package migration
 
 import (
-	"log"
+	"pbl409-dashboard/models"
 
 	"gorm.io/gorm"
 )
 
-type User struct {
-	gorm.Model
-	Email    string
-	Username string
-	Password string
-}
-
-func MigrateUser(db *gorm.DB) {
-	err := db.AutoMigrate(&User{})
+func MigrateUser(db *gorm.DB) error {
+	err := db.AutoMigrate(&models.User{})
 	if err != nil {
-		log.Fatalf("Database Migration Failed: %v", err)
+		return err
 	}
+	return nil
 }
