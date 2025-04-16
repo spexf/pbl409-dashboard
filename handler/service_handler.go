@@ -3,11 +3,14 @@ package handler
 import (
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
+	"pbl409-dashboard/dtos"
 	"pbl409-dashboard/services"
 	"pbl409-dashboard/utils"
 	"strconv"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
@@ -15,6 +18,8 @@ import (
 type ServiceHandler struct {
 	DB *gorm.DB
 }
+
+var validate = validator.New()
 
 func (h *ServiceHandler) GetService(w http.ResponseWriter, r *http.Request) {
 	service, err := services.GetService(h.DB)
@@ -52,6 +57,29 @@ func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	utils.RespondWithJSON(w, http.StatusAccepted, service)
+}
+
+func (h *ServiceHandler) StoreService(w http.ResponseWriter, r *http.Request) {
+	var input dtos.ServiceStore
+	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
+		log.Println("Decode error:", err)
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid request payload")
+		return
+	}
+
+	if err := validate.Struct(input); err != nil {
+		log.Println("Validation error:", err)
+		utils.RespondWithError(w, http.StatusBadRequest, "Validation failed")
+		return
+	}
+
+	if err := services.StoreService(h.DB, input); err != nil {
+		log.Println("Store error", err)
+		utils.RespondWithError(w, http.StatusInternalServerError, "Failed to store service")
+		return
+	}
+
+	utils.RespondWithJSON(w, http.StatusCreated, map[string]string{"message": "Service created successfully"})
 }
 
 func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {

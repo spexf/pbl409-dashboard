@@ -1,6 +1,8 @@
 package models
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 type Service struct {
 	gorm.Model
@@ -9,5 +11,5 @@ type Service struct {
 	Type        string
 	Username    string
 	Password    string
-	ActiveToken string
+	ActiveToken *string
 }

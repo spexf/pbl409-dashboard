@@ -21,3 +21,11 @@ func GetService(db *gorm.DB) ([]models.Service, error) {
 	}
 	return service, nil
 }
+
+func StoreService(db *gorm.DB, service *models.Service) error {
+	if err := db.Create(service).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
