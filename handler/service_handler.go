@@ -17,7 +17,14 @@ type ServiceHandler struct {
 }
 
 func (h *ServiceHandler) GetService(w http.ResponseWriter, r *http.Request) {
-
+	service, err := services.GetService(h.DB)
+	if err != nil {
+		utils.RespondWithError(w, http.StatusInternalServerError, "Gagal mengambil service")
+	}
+	w.Header().Set("Content-Type", "application/json")
+	if err := json.NewEncoder(w).Encode(service); err != nil {
+		utils.RespondWithError(w, http.StatusInternalServerError, "Encode fail")
+	}
 }
 
 func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
@@ -44,9 +51,7 @@ func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(service); err != nil {
-		utils.RespondWithError(w, http.StatusInternalServerError, "Encode fail")
-	}
+	utils.RespondWithJSON(w, http.StatusAccepted, service)
 }
 
 func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {

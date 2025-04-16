@@ -13,3 +13,11 @@ func FindById(db *gorm.DB, id uint) (*models.Service, error) {
 	}
 	return &service, nil
 }
+
+func GetService(db *gorm.DB) ([]models.Service, error) {
+	var service []models.Service
+	if err := db.Find(&service).Error; err != nil {
+		return nil, err
+	}
+	return service, nil
+}

@@ -7,6 +7,10 @@ import (
 	"gorm.io/gorm"
 )
 
+func GetService(db *gorm.DB) ([]models.Service, error) {
+	return repositories.GetService(db)
+}
+
 func ShowService(db *gorm.DB, id uint) (*models.Service, error) {
 	return repositories.FindById(db, id)
 }

@@ -14,6 +14,7 @@ func Router(db *gorm.DB) *mux.Router {
 	}
 	r := mux.NewRouter()
 	api := r.PathPrefix("/api/v1/").Subrouter()
+	api.HandleFunc("/services", serviceHandler.GetService).Methods("GET")
 	api.HandleFunc("/services/{id}", serviceHandler.ShowService).Methods("GET")
 	return r
 }
