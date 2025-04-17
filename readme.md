@@ -45,7 +45,7 @@ PBL409/
 
 ## Requirement
 
-1. Make sure you have Go installed on your PC [Click this to download]("https://go.dev/doc/install")
+1. Make sure you have Go installed on your PC [Click this to download](https://go.dev/doc/install)
 2. Also you need docker to run the database or you can install the database manually.
 
 ## How to run it?
@@ -77,6 +77,6 @@ POSTGRES_DB="dbname"
 4. Run `go mod tidy` to install the package that needed to run this project.
 5. Run the project with `go run main.go`.
 
-### Send feedback for this readme
+### Send feedback for this project
 
 `discord : athkr`
