@@ -6,8 +6,8 @@ services:
     container_name: library-postgres
     ports:
       - "5432:5432"
-    environment:
-      - ../.env
+    env_file:
+      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
 

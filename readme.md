@@ -11,6 +11,7 @@ PBL409/
 │   └── database_connection.go
 ├── database
 │   ├── docker-compose.yml
+│   ├── .env
 │   ├── migration
 │   │   ├── migrateDatabase.go
 │   │   ├── service_migration.go
@@ -66,16 +67,19 @@ DATABASE_NAME="dbname"
 DATABASE_PORT="5432"
 DATABASE_SSL="disable"
 DATABASE_TIMEZONE="dbtimezone"
+```
 
-# DOCKER COMPOSE ENV
+3. Also copy this to .env in database directory
+
+```bash
 POSTGRES_USER="dbuser"
 POSTGRES_PASSWORD="dbpassword"
 POSTGRES_DB="dbname"
 ```
 
-3. Run the database by change your directory to database directory, and then run `docker compose up -d`.
-4. Run `go mod tidy` to install the package that needed to run this project.
-5. Run the project with `go run main.go`.
+4. Run the database by change your directory to database directory, and then run `docker compose up -d`.
+5. Run `go mod tidy` to install the package that needed to run this project.
+6. Run the project with `go run main.go`.
 
 ### Send feedback for this project
 
