@@ -4,7 +4,7 @@ Backend system for SIEM dashboard of PBL409.
 
 ## Project Directory Structure
 
-```
+```bash
 PBL409/
 ├── .env
 ├── config
@@ -52,7 +52,7 @@ PBL409/
 
 1. Pull the project
 
-```
+```bash
 git pull https://github.com/spexf/pbl409-dashboard
 ```
 
