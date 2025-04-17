@@ -43,7 +43,7 @@ PBL409/
     └── validate_id.go
 ```
 
-## Requirement
+## Requirements
 
 1. Make sure you have Go installed on your PC [Click this to download](https://go.dev/doc/install)
 2. Also you need docker to run the database or you can install the database manually.
