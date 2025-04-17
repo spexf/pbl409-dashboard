@@ -69,9 +69,9 @@ DATABASE_SSL="disable"
 DATABASE_TIMEZONE="dbtimezone"
 ```
 
-3. Also copy this to .env in database directory
+3. Also copy this to `.env` in `database` directory
 
-```bash
+```env
 POSTGRES_USER="dbuser"
 POSTGRES_PASSWORD="dbpassword"
 POSTGRES_DB="dbname"
