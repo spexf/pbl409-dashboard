@@ -19,6 +19,10 @@ func ShowService(db *gorm.DB, id uint) (*models.Service, error) {
 	return repositories.FindById(db, id)
 }
 
+func DeleteService(db *gorm.DB, id uint) error {
+	return repositories.DeleteService(db, id)
+}
+
 func StoreService(db *gorm.DB, store dtos.ServiceStore) error {
 	if err := validate.Struct(store); err != nil {
 		return err

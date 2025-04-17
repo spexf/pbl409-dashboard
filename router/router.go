@@ -17,5 +17,6 @@ func Router(db *gorm.DB) *mux.Router {
 	api.HandleFunc("/services", serviceHandler.GetService).Methods("GET")
 	api.HandleFunc("/services", serviceHandler.StoreService).Methods("POST")
 	api.HandleFunc("/services/{id}", serviceHandler.ShowService).Methods("GET")
+	api.HandleFunc("/services/{id}", serviceHandler.DeleteService).Methods("DELETE", "OPTIONS")
 	return r
 }

@@ -8,10 +8,8 @@ import (
 	"pbl409-dashboard/dtos"
 	"pbl409-dashboard/services"
 	"pbl409-dashboard/utils"
-	"strconv"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gorilla/mux"
 	"gorm.io/gorm"
 )
 
@@ -33,24 +31,17 @@ func (h *ServiceHandler) GetService(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	idStr := vars["id"]
-	if idStr == "" {
-		utils.RespondWithError(w, http.StatusBadRequest, "ID Tidak Ditemukan")
+	id, ok := utils.ValidateAndParseIDParam(w, r, "id")
+	if !ok {
+		return
 	}
-
-	if idStr < "0" {
-		utils.RespondWithError(w, http.StatusBadRequest, "ID Harus Bernilai Positif")
-	}
-
-	id, err := strconv.Atoi(idStr)
 
 	service, err := services.ShowService(h.DB, uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			utils.RespondWithError(w, http.StatusNotFound, "Service tidak ditemukan")
+			utils.RespondWithError(w, http.StatusNotFound, "Service not found")
 		} else {
-			utils.RespondWithError(w, http.StatusInternalServerError, "Gagal menggambil data service")
+			utils.RespondWithError(w, http.StatusInternalServerError, "Getting service data failed")
 		}
 		return
 	}
@@ -87,5 +78,22 @@ func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
+	id, ok := utils.ValidateAndParseIDParam(w, r, "id")
+	if !ok {
+		return
+	}
+
+	err := services.DeleteService(h.DB, uint(id))
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			utils.RespondWithError(w, http.StatusNotFound, "Service not found")
+		} else {
+			utils.RespondWithError(w, http.StatusInternalServerError, "Getting service data failed")
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	utils.RespondWithJSON(w, http.StatusNoContent, "Service deletion success")
 
 }
