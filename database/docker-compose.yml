@@ -7,9 +7,7 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: admindb
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: pbl409_dashboard
+      - ../.env
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
