@@ -32,6 +32,11 @@ func StoreService(db *gorm.DB, service *models.Service) error {
 
 func DeleteService(db *gorm.DB, id uint) error {
 	var service models.Service
+
+	if err := db.First(&service, id).Error; err != nil {
+		return err
+	}
+
 	if err := db.Delete(&service, id).Error; err != nil {
 		return err
 	}

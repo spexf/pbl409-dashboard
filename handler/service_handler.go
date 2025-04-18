@@ -25,9 +25,7 @@ func (h *ServiceHandler) GetService(w http.ResponseWriter, r *http.Request) {
 		utils.RespondWithError(w, http.StatusInternalServerError, "Gagal mengambil service")
 	}
 	w.Header().Set("Content-Type", "application/json")
-	if err := json.NewEncoder(w).Encode(service); err != nil {
-		utils.RespondWithError(w, http.StatusInternalServerError, "Encode fail")
-	}
+	utils.RespondWithJSON(w, http.StatusOK, service, "Getting data success")
 }
 
 func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
@@ -47,7 +45,7 @@ func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	utils.RespondWithJSON(w, http.StatusAccepted, service)
+	utils.RespondWithJSON(w, http.StatusAccepted, service, "Getting data success")
 }
 
 func (h *ServiceHandler) StoreService(w http.ResponseWriter, r *http.Request) {
@@ -70,7 +68,7 @@ func (h *ServiceHandler) StoreService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondWithJSON(w, http.StatusCreated, map[string]string{"message": "Service created successfully"})
+	utils.RespondWithJSON(w, http.StatusCreated, input, "Service created succcessfully")
 }
 
 func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
@@ -94,6 +92,6 @@ func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	utils.RespondWithJSON(w, http.StatusNoContent, "Service deletion success")
+	utils.RespondWithJSON(w, http.StatusOK, nil, "Service deletion success")
 
 }

@@ -5,13 +5,20 @@ import (
 	"net/http"
 )
 
-func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}) {
+type Result struct {
+	Code    int         `json:"code"`
+	Data    interface{} `json:"data"`
+	Message string      `json:"message"`
+}
+
+func RespondWithJSON(w http.ResponseWriter, code int, payload interface{}, message string) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(payload)
+	res := Result{Code: code, Data: payload, Message: message}
+	json.NewEncoder(w).Encode(res)
 
 }
 
 func RespondWithError(w http.ResponseWriter, code int, message string) {
-	RespondWithJSON(w, code, map[string]string{"message": message})
+	RespondWithJSON(w, code, nil, message)
 }
