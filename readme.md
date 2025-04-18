@@ -41,8 +41,8 @@ PBL409/
 │   └── user_service.go
 └── utils
     ├── response.go
-    └── validate_id.go
-    ├── validate_json.go
+    ├── validate_id.go
+    └── validate_json.go
 ```
 
 ## Requirements
