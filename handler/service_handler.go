@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
@@ -9,15 +8,12 @@ import (
 	"pbl409-dashboard/services"
 	"pbl409-dashboard/utils"
 
-	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
 
 type ServiceHandler struct {
 	DB *gorm.DB
 }
-
-var validate = validator.New()
 
 func (h *ServiceHandler) GetService(w http.ResponseWriter, r *http.Request) {
 	service, err := services.GetService(h.DB)
@@ -50,15 +46,7 @@ func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
 
 func (h *ServiceHandler) StoreService(w http.ResponseWriter, r *http.Request) {
 	var input dtos.ServiceStore
-	if err := json.NewDecoder(r.Body).Decode(&input); err != nil {
-		log.Println("Decode error:", err)
-		utils.RespondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
-
-	if err := validate.Struct(input); err != nil {
-		log.Println("Validation error:", err)
-		utils.RespondWithError(w, http.StatusBadRequest, "Validation failed")
+	if ok := utils.ParseAndValidateJSON(w, r, &input); !ok {
 		return
 	}
 
