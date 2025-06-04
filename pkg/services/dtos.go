@@ -1,4 +1,4 @@
-package dtos
+package service
 
 type ServiceStore struct {
 	Name     string `json:"name" validate:"required"`

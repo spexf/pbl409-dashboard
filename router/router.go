@@ -1,7 +1,7 @@
 package router
 
 import (
-	"pbl409-dashboard/handler"
+	service "pbl409-dashboard/pkg/services"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
@@ -9,7 +9,7 @@ import (
 
 func Router(db *gorm.DB) *mux.Router {
 
-	serviceHandler := &handler.ServiceHandler{
+	serviceHandler := &service.ServiceHandler{
 		DB: db,
 	}
 	r := mux.NewRouter()

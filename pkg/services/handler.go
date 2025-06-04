@@ -1,12 +1,10 @@
-package handler
+package service
 
 import (
 	"errors"
 	"log"
 	"net/http"
-	"pbl409-dashboard/dtos"
-	"pbl409-dashboard/services"
-	"pbl409-dashboard/utils"
+	"pbl409-dashboard/pkg/utils"
 
 	"gorm.io/gorm"
 )
@@ -16,7 +14,7 @@ type ServiceHandler struct {
 }
 
 func (h *ServiceHandler) GetService(w http.ResponseWriter, r *http.Request) {
-	service, err := services.GetService(h.DB)
+	service, err := GetService(h.DB)
 	if err != nil {
 		utils.RespondWithError(w, http.StatusInternalServerError, "Gagal mengambil service")
 	}
@@ -30,7 +28,7 @@ func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	service, err := services.ShowService(h.DB, uint(id))
+	service, err := ShowService(h.DB, uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			utils.RespondWithError(w, http.StatusNotFound, "Service not found")
@@ -45,12 +43,12 @@ func (h *ServiceHandler) ShowService(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ServiceHandler) StoreService(w http.ResponseWriter, r *http.Request) {
-	var input dtos.ServiceStore
+	var input ServiceStore
 	if ok := utils.ParseAndValidateJSON(w, r, &input); !ok {
 		return
 	}
 
-	if err := services.StoreService(h.DB, input); err != nil {
+	if err := StoreService(h.DB, input); err != nil {
 		log.Println("Store error", err)
 		utils.RespondWithError(w, http.StatusInternalServerError, "Failed to store service")
 		return
@@ -60,7 +58,7 @@ func (h *ServiceHandler) StoreService(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
-
+	// TODO PUT1_create update service handler
 }
 
 func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
@@ -69,7 +67,7 @@ func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := services.DeleteService(h.DB, uint(id))
+	err := DeleteService(h.DB, uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			utils.RespondWithError(w, http.StatusNotFound, "Service not found")

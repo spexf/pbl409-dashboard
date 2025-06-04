@@ -1,28 +1,26 @@
-package repositories
+package service
 
 import (
-	"pbl409-dashboard/models"
-
 	"gorm.io/gorm"
 )
 
-func FindById(db *gorm.DB, id uint) (*models.Service, error) {
-	var service models.Service
+func FindById(db *gorm.DB, id uint) (*Service, error) {
+	var service Service
 	if err := db.First(&service, id).Error; err != nil {
 		return nil, err
 	}
 	return &service, nil
 }
 
-func GetService(db *gorm.DB) ([]models.Service, error) {
-	var service []models.Service
+func Get(db *gorm.DB) ([]Service, error) {
+	var service []Service
 	if err := db.Find(&service).Error; err != nil {
 		return nil, err
 	}
 	return service, nil
 }
 
-func StoreService(db *gorm.DB, service *models.Service) error {
+func Store(db *gorm.DB, service *Service) error {
 	if err := db.Create(service).Error; err != nil {
 		return err
 	}
@@ -30,8 +28,8 @@ func StoreService(db *gorm.DB, service *models.Service) error {
 	return nil
 }
 
-func DeleteService(db *gorm.DB, id uint) error {
-	var service models.Service
+func Delete(db *gorm.DB, id uint) error {
+	var service Service
 
 	if err := db.First(&service, id).Error; err != nil {
 		return err
@@ -40,5 +38,10 @@ func DeleteService(db *gorm.DB, id uint) error {
 	if err := db.Delete(&service, id).Error; err != nil {
 		return err
 	}
+	return nil
+}
+
+func UpdateServiceById(db *gorm.DB, id uint) error {
+	// TODO PUT1_create update service repo
 	return nil
 }

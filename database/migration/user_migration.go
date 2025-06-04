@@ -1,13 +1,13 @@
 package migration
 
 import (
-	"pbl409-dashboard/models"
+	user "pbl409-dashboard/pkg/users"
 
 	"gorm.io/gorm"
 )
 
 func MigrateUser(db *gorm.DB) error {
-	err := db.AutoMigrate(&models.User{})
+	err := db.AutoMigrate(&user.User{})
 	if err != nil {
 		return err
 	}
