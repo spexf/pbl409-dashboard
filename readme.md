@@ -7,11 +7,10 @@ Backend system for SIEM dashboard of PBL409.
 ```bash
 PBL409/
 ├── .env
+├── Dockerfile
 ├── config
 │   └── database_connection.go
 ├── database
-│   ├── docker-compose.yml
-│   ├── .env
 │   ├── migration
 │   │   ├── migrateDatabase.go
 │   │   ├── service_migration.go
@@ -19,30 +18,35 @@ PBL409/
 │   └── seeder
 │       ├── service_seeder.go
 │       └── user_seeder.go
-├── dtos
-│   └── service.go
+├── docker-compose.yml
 ├── go.mod
 ├── go.sum
-├── handler
-│   └── service_handler.go
 ├── main.go
 ├── middleware
 │   └── middleware.go
-├── models
-│   ├── service.go
-│   └── user.go
-├── repositories
-│   ├── service_repository.go
-│   └── user_repository.go
-├── router
-│   └── router.go
-├── services
-│   ├── service_service.go
-│   └── user_service.go
-└── utils
-    ├── response.go
-    ├── validate_id.go
-    └── validate_json.go
+├── pkg
+│   ├── auth
+│   │   ├── handler.go
+│   │   └── service.go
+│   ├── services
+│   │   ├── dtos.go
+│   │   ├── handler.go
+│   │   ├── model.go
+│   │   ├── repository.go
+│   │   └── service.go
+│   ├── users
+│   │   ├── dtos.go
+│   │   ├── handler.go
+│   │   ├── model.go
+│   │   ├── repository.go
+│   │   └── service.go
+│   └── utils
+│       ├── response.go
+│       ├── validate_id.go
+│       └── validate_json.go
+├── readme.md
+└── router
+    └── router.go
 ```
 
 ## Requirements
@@ -68,19 +72,10 @@ DATABASE_NAME="dbname"
 DATABASE_PORT="5432"
 DATABASE_SSL="disable"
 DATABASE_TIMEZONE="dbtimezone"
+JWT_SECRET_KEY="JWT KEY"
 ```
 
-3. Also copy this to `.env` in `database` directory
-
-```env
-POSTGRES_USER="dbuser"
-POSTGRES_PASSWORD="dbpassword"
-POSTGRES_DB="dbname"
-```
-
-4. Run the database by change your directory to database directory, and then run `docker compose up -d`.
-5. Run `go mod tidy` to install the package that needed to run this project.
-6. Run the project with `go run main.go`.
+3. use `docker-compose up -d` to run the API
 
 ### Send feedback for this project
 
