@@ -1,8 +1,6 @@
 package user
 
 import (
-	"fmt"
-
 	"github.com/go-playground/validator/v10"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -27,7 +25,7 @@ func UpdateUser(db *gorm.DB, id uint, updated map[string]interface{}) error {
 		// Konversi interface{} ke string
 		passwordStr, ok := passwordRaw.(string)
 		if !ok {
-			return fmt.Errorf("password must be a string")
+			return nil
 		}
 
 		// Hash password baru

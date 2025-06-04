@@ -22,6 +22,15 @@ func Get(db *gorm.DB) ([]UserResponse, error) {
 	return userResponse, nil
 }
 
+func FindByUsername(db *gorm.DB, username string) (*User, error) {
+	var user User
+	if err := db.Where("username = ?", username).First(&user).Error; err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 func FindById(db *gorm.DB, id uint) (*User, error) {
 	var user User
 	if err := db.First(&user, id).Error; err != nil {
