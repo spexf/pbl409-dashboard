@@ -70,7 +70,7 @@ func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := Update(h.DB, uint(id), updated); err != nil {
+	if err := UpdateService(h.DB, uint(id), updated); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			utils.RespondWithError(w, http.StatusNotFound, "Service not found")
 		} else {
