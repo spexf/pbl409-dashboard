@@ -41,7 +41,16 @@ func Delete(db *gorm.DB, id uint) error {
 	return nil
 }
 
-func UpdateServiceById(db *gorm.DB, id uint) error {
-	// TODO PUT1_create update service repo
+func Update(db *gorm.DB, id uint, updated map[string]interface{}) error {
+
+	var service Service
+	if err := db.First(&service, id).Error; err != nil {
+		return err
+	}
+
+	if err := db.Model(&service).Updates(updated).Error; err != nil {
+		return err
+	}
+
 	return nil
 }

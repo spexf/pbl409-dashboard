@@ -1,6 +1,7 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
 	"log"
 	"net/http"
@@ -58,7 +59,27 @@ func (h *ServiceHandler) StoreService(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *ServiceHandler) UpdateService(w http.ResponseWriter, r *http.Request) {
-	// TODO PUT1_create update service handler
+	id, ok := utils.ValidateAndParseIDParam(w, r, "id")
+	if !ok {
+		return
+	}
+
+	var updated map[string]interface{}
+	if err := json.NewDecoder(r.Body).Decode(&updated); err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, "Invalid JSON")
+		return
+	}
+
+	if err := Update(h.DB, uint(id), updated); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			utils.RespondWithError(w, http.StatusNotFound, "Service not found")
+		} else {
+			utils.RespondWithError(w, http.StatusInternalServerError, "Getting service data failed")
+		}
+		return
+	}
+
+	utils.RespondWithJSON(w, http.StatusOK, nil, "Service modified successfully")
 }
 
 func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
@@ -67,7 +88,7 @@ func (h *ServiceHandler) DeleteService(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := DeleteService(h.DB, uint(id))
+	err := Delete(h.DB, uint(id))
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			utils.RespondWithError(w, http.StatusNotFound, "Service not found")

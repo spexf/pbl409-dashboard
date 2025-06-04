@@ -19,6 +19,10 @@ func DeleteService(db *gorm.DB, id uint) error {
 	return Delete(db, id)
 }
 
+func UpdateService(db *gorm.DB, id uint, updated map[string]interface{}) error {
+	return Update(db, id, updated)
+}
+
 func StoreService(db *gorm.DB, store ServiceStore) error {
 	if err := validate.Struct(store); err != nil {
 		return err
