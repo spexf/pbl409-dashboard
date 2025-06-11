@@ -1,8 +1,9 @@
 package auth
 
 import (
-	"os"
+	"fmt"
 	user "pbl409-dashboard/pkg/users"
+	"pbl409-dashboard/pkg/utils"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -10,27 +11,31 @@ import (
 	"gorm.io/gorm"
 )
 
-var jwtSecret = []byte(os.Getenv("JWT_SECRET_KEY"))
+var jwtSecret = utils.GetJWTSecret()
 
 func Login(db *gorm.DB, input user.LoginDTO) (string, error) {
-	user, err := user.FindByUsername(db, input.Username)
+	fmt.Print(jwtSecret)
+	foundUser, err := user.FindByUsername(db, input.Username)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("invalid username or password")
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(input.Password))
+	err = bcrypt.CompareHashAndPassword([]byte(foundUser.Password), []byte(input.Password))
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("invalid username or password")
 	}
+
 	claims := jwt.MapClaims{
-		"user_id":  user.ID,
-		"username": user.Username,
-		"exp":      time.Now().Add(time.Hour * 24).Unix(), // Token berlaku selama 24 jam
+		"sub":      fmt.Sprintf("%d", foundUser.ID),
+		"user_id":  foundUser.ID,
+		"username": foundUser.Username,
+		"exp":      time.Now().Add(time.Hour * 24).Unix(),
 		"iat":      time.Now().Unix(),
 	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	signedToken, err := token.SignedString(jwtSecret)
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("failed to sign token: %v", err)
 	}
 
 	return signedToken, nil
