@@ -11,6 +11,7 @@ import (
 )
 
 func main() {
+	config.InitRedis()
 	db := config.ConnectDB()
 	router := router.Router(db)
 	migration.MigrateAll()

@@ -14,7 +14,6 @@ import (
 var jwtSecret = utils.GetJWTSecret()
 
 func Login(db *gorm.DB, input user.LoginDTO) (string, error) {
-	fmt.Print(jwtSecret)
 	foundUser, err := user.FindByUsername(db, input.Username)
 	if err != nil {
 		return "", fmt.Errorf("invalid username or password")

@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"fmt"
 	"net/http"
 	"pbl409-dashboard/pkg/utils"
 	"strings"
@@ -31,7 +30,6 @@ func JWTAuth(next http.Handler) http.Handler {
 		tokenString := parts[1]
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-				fmt.Print(ok)
 				return nil, jwt.ErrSignatureInvalid
 			}
 			return utils.GetJWTSecret(), nil

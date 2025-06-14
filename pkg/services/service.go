@@ -1,6 +1,8 @@
 package service
 
 import (
+	wazuh "pbl409-dashboard/pkg/client"
+
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"
 )
@@ -37,4 +39,17 @@ func StoreService(db *gorm.DB, store ServiceStore) error {
 	}
 
 	return Store(db, &service)
+}
+
+func SetWazuhHost(db *gorm.DB, id uint) (*wazuh.WazuhHost, error) {
+	svc, err := FindById(db, id)
+	if err != nil {
+		return nil, err
+	}
+	return &wazuh.WazuhHost{
+		Username:  svc.Username,
+		Password:  svc.Password,
+		Host:      svc.Host,
+		ServiceID: svc.ID,
+	}, nil
 }
