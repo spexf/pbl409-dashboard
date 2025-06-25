@@ -2,9 +2,11 @@ package agents
 
 import (
 	"encoding/json"
+	"fmt"
 	wazuh "pbl409-dashboard/pkg/client"
 	service "pbl409-dashboard/pkg/services"
 	"pbl409-dashboard/pkg/utils"
+	"strings"
 
 	"gorm.io/gorm"
 )
@@ -96,4 +98,93 @@ func GetAgents(db *gorm.DB, id uint) (interface{}, error) {
 	}
 	return agents, nil
 
+}
+
+func GetAgentDetails(db *gorm.DB, wazuh_id uint, agent_name string) (interface{}, error) {
+	host, err := service.SetWazuhHost(db, wazuh_id)
+	if err != nil {
+		return nil, err
+	}
+	token, err := utils.GetWazuhToken(host)
+	if err != nil {
+		return nil, err
+	}
+	body, err := wazuh.WazuhGet(host, token, "/agents?name="+agent_name+"&limit=1")
+	var rawResp AgentItemResponse
+	if err := json.Unmarshal(body, &rawResp); err != nil {
+		return nil, err
+	}
+
+	if len(rawResp.Data.AffectedItems) == 0 {
+		return nil, fmt.Errorf("agent dengan nama '%s' tidak ditemukan", agent_name)
+	}
+
+	// Ambil agent pertama (karena pakai limit=1)
+	agent := rawResp.Data.AffectedItems[0]
+
+	return agent, err
+}
+
+func StoreAgents(db *gorm.DB, wazuh_id uint, agent AgentStoreData) (interface{}, error) {
+	host, err := service.SetWazuhHost(db, wazuh_id)
+	if err != nil {
+		return nil, err
+	}
+	token, err := utils.GetWazuhToken(host)
+	if err != nil {
+		return nil, err
+	}
+
+	payload := map[string]interface{}{
+		"name": agent.Name,
+		"ip":   agent.Host,
+	}
+
+	fmt.Print(payload)
+	body, err := wazuh.WazuhPost(host, token, "/agents", payload)
+	if err != nil {
+		return nil, err
+	}
+
+	fmt.Print(err)
+
+	var result AgentKeyResponse
+	if err := json.Unmarshal(body, &result); err != nil {
+		return nil, err
+	}
+
+	return result, err
+
+}
+
+func DeleteAgents(db *gorm.DB, wazuh_id uint, agents []string) (interface{}, error) {
+	host, err := service.SetWazuhHost(db, wazuh_id)
+	if err != nil {
+		return nil, err
+	}
+	token, err := utils.GetWazuhToken(host)
+	if err != nil {
+		return nil, err
+	}
+
+	agent_list := JoinIDFromSlice(agents)
+	body, err := wazuh.WazuhDelete(host, token, "/agents?agents_list="+agent_list+"&status=all&older_than=0")
+	if err != nil {
+		return nil, err
+	}
+
+	var response WazuhDeleteResponse
+	if err := json.Unmarshal(body, &response); err != nil {
+		return nil, err
+	}
+
+	return map[string]interface{}{
+		"data":    response.Data,
+		"message": response.Message,
+		"error":   response.Error,
+	}, nil
+}
+
+func JoinIDFromSlice(agentIDs []string) string {
+	return strings.Join(agentIDs, ",")
 }

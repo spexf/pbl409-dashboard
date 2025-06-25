@@ -15,7 +15,7 @@ services:
 
   cache:
     image: redis:latest
-    container_name: cahce-storage
+    container_name: cache-storage
     ports:
       - "6379:6379"
 

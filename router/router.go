@@ -42,7 +42,9 @@ func Router(db *gorm.DB) *mux.Router {
 	private.HandleFunc("/users/{id}", userHandler.DeleteUser).Methods("DELETE", "OPTIONS")
 
 	// Agents
-	private.HandleFunc("/wazuh/{id}/agents", agentHandler.GetAgentData).Methods("GET")
-
+	private.HandleFunc("/wazuh/{id}/agents", agentHandler.GetAgents).Methods("GET")
+	private.HandleFunc("/wazuh/{id}/agents/{agentName}", agentHandler.GetAgentData).Methods("GET")
+	private.HandleFunc("/wazuh/{id}/agents", agentHandler.CreateAgents).Methods("POST")
+	private.HandleFunc("/wazuh/{id}/agents", agentHandler.DeleteAgents).Methods("DELETE", "OPTIONS")
 	return r
 }
