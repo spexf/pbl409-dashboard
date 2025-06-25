@@ -16,6 +16,8 @@ func main() {
 	router := router.Router(db)
 	migration.MigrateAll()
 
+	http.Handle("/", http.FileServer(http.Dir("./frontend")))
+
 	handler := cors.New(cors.Options{
 		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"POST", "GET", "PUT", "DELETE", "OPTIONS"},
