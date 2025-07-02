@@ -1,0 +1,28 @@
+{{ define "content" }}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-header bg-danger text-white">
+        <h4><i class="fas fa-exclamation-triangle"></i> Hapus Agent</h4>
+      </div>
+      <div class="card-body">
+        <p>Apakah kamu yakin ingin menghapus <strong>{{ .Agent.Name }}</strong> (IP: {{ .Agent.IP }})?</p>
+        <button class="btn btn-danger btn-block" onclick="hapusAgent('{{ .Agent.ID }}')"><i class="fas fa-trash-alt"></i> Hapus</button>
+        <a href="/agents" class="btn btn-secondary btn-block">Batal</a>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/static/js/agents.js"></script>
+<script>
+  async function hapusAgent(id) {
+    const result = await deleteAgent(id);
+    if (result && result.data) {
+      alert("Berhasil dihapus");
+      window.location.href = "/agents";
+    } else {
+      alert("Gagal menghapus agent.");
+    }
+  }
+</script>
+{{ end }}

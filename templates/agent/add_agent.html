@@ -1,0 +1,39 @@
+{{ define "content" }}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-header bg-success text-white">
+        <h4><i class="fas fa-plus-circle"></i> Tambah Agent</h4>
+      </div>
+      <div class="card-body">
+        <form id="addAgentForm">
+          <div class="form-group">
+            <label for="name">Nama Agent</label>
+            <input type="text" class="form-control" id="name" required />
+          </div>
+          <div class="form-group">
+            <label for="ip">IP Address</label>
+            <input type="text" class="form-control" id="ip" required />
+          </div>
+          <button type="submit" class="btn btn-success btn-block"><i class="fas fa-check-circle"></i> Simpan</button>
+          <a href="/agents" class="btn btn-secondary btn-block">Batal</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+document.getElementById("addAgentForm").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const name = document.getElementById("name").value;
+  const ip = document.getElementById("ip").value;
+  const result = await addAgent(name, ip);
+  if (result && result.data) {
+    alert("Agent berhasil ditambahkan!");
+    window.location.href = "/agents";
+  } else {
+    alert("Gagal menambahkan agent.");
+  }
+});
+</script>
+{{ end }}
