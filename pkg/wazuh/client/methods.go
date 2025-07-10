@@ -76,7 +76,7 @@ func WazuhPost(host *WazuhHost, token string, endpoint string, payload interface
 	}
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		return nil, fmt.Errorf("failed to post data: %s", string(body))
+		return nil, fmt.Errorf("%s", string(body))
 	}
 
 	return body, nil
@@ -109,7 +109,7 @@ func WazuhDelete(host *WazuhHost, token string, endpoint string) ([]byte, error)
 	}
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		return nil, fmt.Errorf("failed to post data: %s", string(body))
+		return nil, fmt.Errorf("%s", string(body))
 	}
 
 	return body, nil

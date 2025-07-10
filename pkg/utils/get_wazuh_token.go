@@ -2,7 +2,7 @@ package utils
 
 import (
 	"pbl409-dashboard/config"
-	wazuh "pbl409-dashboard/pkg/client"
+	wazuh "pbl409-dashboard/pkg/wazuh/client"
 
 	"github.com/go-redis/redis/v8"
 )

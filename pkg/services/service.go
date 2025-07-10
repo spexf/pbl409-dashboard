@@ -1,7 +1,7 @@
 package service
 
 import (
-	wazuh "pbl409-dashboard/pkg/client"
+	wazuh "pbl409-dashboard/pkg/wazuh/client"
 
 	"github.com/go-playground/validator/v10"
 	"gorm.io/gorm"

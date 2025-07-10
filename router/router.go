@@ -1,11 +1,12 @@
 package router
 
 import (
-	"pbl409-dashboard/pkg/agents"
 	"pbl409-dashboard/pkg/auth"
 	middleware "pbl409-dashboard/pkg/middleware"
 	service "pbl409-dashboard/pkg/services"
 	user "pbl409-dashboard/pkg/users"
+	"pbl409-dashboard/pkg/wazuh/agents"
+	"pbl409-dashboard/pkg/wazuh/groups"
 
 	"github.com/gorilla/mux"
 	"gorm.io/gorm"
@@ -16,6 +17,7 @@ func Router(db *gorm.DB) *mux.Router {
 	userHandler := &user.UserHandler{DB: db}
 	authHandler := &auth.AuthHandler{DB: db}
 	agentHandler := &agents.AgentHandler{DB: db}
+	groupHandler := &groups.GroupHandler{DB: db}
 
 	r := mux.NewRouter()
 
@@ -46,5 +48,9 @@ func Router(db *gorm.DB) *mux.Router {
 	private.HandleFunc("/wazuh/{id}/agents/{agentName}", agentHandler.GetAgentData).Methods("GET")
 	private.HandleFunc("/wazuh/{id}/agents", agentHandler.CreateAgents).Methods("POST")
 	private.HandleFunc("/wazuh/{id}/agents", agentHandler.DeleteAgents).Methods("DELETE", "OPTIONS")
+
+	// Groups
+	private.HandleFunc("/wazuh/{id}/groups", groupHandler.GetGroups).Methods("GET")
+	private.HandleFunc("/wazuh/{id}/groups", groupHandler.CreateGroup).Methods("POST")
 	return r
 }

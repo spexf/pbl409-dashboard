@@ -79,7 +79,7 @@ func (h *UserHandler) UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	utils.RespondWithJSON(w, http.StatusOK, nil, "Service modified successfully")
+	utils.RespondWithJSON(w, http.StatusOK, nil, "User modified successfully")
 }
 
 func (h *UserHandler) DeleteUser(w http.ResponseWriter, r *http.Request) {

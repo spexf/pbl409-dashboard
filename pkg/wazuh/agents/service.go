@@ -3,9 +3,9 @@ package agents
 import (
 	"encoding/json"
 	"fmt"
-	wazuh "pbl409-dashboard/pkg/client"
 	service "pbl409-dashboard/pkg/services"
 	"pbl409-dashboard/pkg/utils"
+	wazuh "pbl409-dashboard/pkg/wazuh/client"
 	"strings"
 
 	"gorm.io/gorm"
